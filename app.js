@@ -1,3 +1,4 @@
+require('dotenv').config()
 // frameworks & libraries
 const path = require('path')
 const express = require('express')
