@@ -14,7 +14,7 @@ const methodOverride = require('method-override')
 const routes = require('./routes')
 require('./config/mongoose')
 
-const PORT = 3000
+const PORT = process.env.PORT || 3000
 
 app.engine('handlebars', exphbs({ defaultLayout: 'main' }))
 app.set('view engine', 'handlebars')
@@ -33,6 +33,16 @@ app.use(session({
 }))
 usePassport(app)
 app.use(routes)
+
+// Handle Production
+if (process.env.NODE_ENV === 'production') {
+  // Direct to Static Folder
+  // 需要用path.join連接public資料夾的檔案
+  app.use(express.static(path.join(__dirname, '/public/')))
+
+  // Handle SPA
+  app.get(/.*/, (req, res) => res.sendFile(__dirname, '/public/index.html'))
+}
 
 
 app.listen(PORT, () => {
