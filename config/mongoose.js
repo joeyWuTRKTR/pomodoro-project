@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
 const db = mongoose.connection
 const urlDB = process.env.MONGODB_URI || 'mongodb://localhost/TimerTask'
+console.log('Now is connecting with : ', urlDB)
 
 mongoose.connect(urlDB, { useNewUrlParser: true, useUnifiedTopology: true })
 
