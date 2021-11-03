@@ -24,9 +24,7 @@ app.set('view engine', 'handlebars')
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 app.use(methodOverride('_method'))
-app.use(cors({
-  origin: ['http://localhost:8080'],
-}))
+app.use(cors())
 
 app.use(session({
   secret: 'tomato-backend',
@@ -34,14 +32,13 @@ app.use(session({
   saveUninitialized: true
 }))
 usePassport(app)
-app.use(routes)
+app.use('/apis/', routes)
 
 // Handle Production
 if (process.env.NODE_ENV === 'production') {
   // Direct to Static Folder
   // 需要用path.join連接public資料夾的檔案
   app.use(express.static(path.join(__dirname, '/public/')))
-
   // Handle SPA
   app.get(/.*/, (req, res) => res.sendFile(__dirname, '/public/index.html'))
 }
