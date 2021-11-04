@@ -28,7 +28,8 @@ app.use(bodyParser.json())
 app.use(methodOverride('_method'))
 
 app.use(cors({
-  origin: ['https://mysterious-everglades-87446.herokuapp.com']
+  origin: ['https://mysterious-everglades-87446.herokuapp.com'],
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE"
 }))
   // origin: ['http://localhost:3000']
   // origin: ["https://mysterious-everglades-87446.herokuapp.com"],
