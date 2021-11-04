@@ -52,7 +52,10 @@ if (process.env.NODE_ENV === 'production') {
   // 需要用path.join連接public資料夾的檔案
   app.use(express.static(path.join(__dirname, '/public/')))
   // Handle SPA
-  app.get(/.*/, (req, res) => res.sendFile(__dirname, '/public/index.html'))
+  app.get(/.*/, (req, res) => { 
+    console.log(`__dirname: ${__dirname}`)
+    res.sendFile(__dirname, '/public/index.html') 
+})
 }
 
 

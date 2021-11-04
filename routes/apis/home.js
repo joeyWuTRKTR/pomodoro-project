@@ -5,7 +5,10 @@ const Task = require('../../models/task')
 router.get('/', (req, res) => {
   Task.find()
     .lean()
-    .then(tasks => res.send({ tasks }))
+    .then(tasks => {
+      console.log(`get tasks: ${tasks}`)
+      res.send({ tasks })
+    })
     .catch(error => console.log(error))
 })
 
