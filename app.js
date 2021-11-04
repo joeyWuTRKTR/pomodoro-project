@@ -5,8 +5,8 @@ const express = require('express')
 const exphbs = require('express-handlebars')
 const bodyParser = require('body-parser')
 const session = require('express-session')
-const MongoStore = require('connect-mongo')(session)
-const mongoose = require('mongoose')
+// const MongoStore = require('connect-mongo')(session)
+// const mongoose = require('mongoose')
 const usePassport = require('./config/passport')
 const cors = require('cors')
 const app = express()
@@ -26,20 +26,24 @@ app.set('view engine', 'handlebars')
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 app.use(methodOverride('_method'))
+
 app.use(cors({
-  origin: "https://mysterious-everglades-87446.herokuapp.com",
-  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-  credentials: true // allow session cookie from browser to pass through
+  origin: ['https://mysterious-everglades-87446.herokuapp.com']
 }))
+  // origin: ['http://localhost:3000']
+  // origin: ["https://mysterious-everglades-87446.herokuapp.com"],
+  // methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+  // credentials: true // allow session cookie from browser to pass through
+
 
 app.use(session({
   secret: 'tomato-backend',
   resave: false,
   saveUninitialized: true,
-  store: new MongoStore({ mongooseConnection: mongoose.connection })
+  // store: new MongoStore({ mongooseConnection: mongoose.connection })
 }))
 usePassport(app)
-app.use('/apis/', routes)
+app.use(routes)
 
 // Handle Production
 if (process.env.NODE_ENV === 'production') {
