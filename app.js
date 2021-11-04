@@ -5,6 +5,7 @@ const express = require('express')
 const exphbs = require('express-handlebars')
 const bodyParser = require('body-parser')
 const session = require('express-session')
+const MongoStore = require('connect-mongo')(session)
 const usePassport = require('./config/passport')
 const cors = require('cors')
 const app = express()
@@ -33,7 +34,8 @@ app.use(cors({
 app.use(session({
   secret: 'tomato-backend',
   resave: false,
-  saveUninitialized: true
+  saveUninitialized: true,
+  store: new MongoStore({ mongooseConnection: mongoose.connection })
 }))
 usePassport(app)
 app.use('/apis/', routes)
