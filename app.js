@@ -15,7 +15,7 @@ const app = express()
 const methodOverride = require('method-override')
 
 // routes
-const routes = require('./routes')
+const routes = require('./routes/index.js')
 require('./config/mongoose')
 
 const PORT = process.env.PORT || 3000
@@ -44,7 +44,7 @@ app.use(session({
   // store: new MongoStore({ mongooseConnection: mongoose.connection })
 }))
 usePassport(app)
-app.use('/apis/', routes)
+app.use('/apis', routes)
 
 // Handle Production
 if (process.env.NODE_ENV === 'production') {
