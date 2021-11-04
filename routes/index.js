@@ -11,9 +11,9 @@ const apiUsers = require('./apis/users')
 // router.use('/', home)
 // router.use('/tasks', tasks)
 // router.use('/users', users)
-router.use('/apis', apiHome)
-router.use('/apis/tasks', apiTasks)
-router.use('/apis/users', apiUsers)
+router.use('/', apiHome)
+router.use('/tasks', apiTasks)
+router.use('/users', apiUsers)
 
 
 module.exports = router

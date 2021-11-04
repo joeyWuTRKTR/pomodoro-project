@@ -27,6 +27,7 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 app.use(methodOverride('_method'))
 
+// 開放跨域來源
 app.use(cors({
   origin: ['https://mysterious-everglades-87446.herokuapp.com'],
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE"
