@@ -24,7 +24,11 @@ app.set('view engine', 'handlebars')
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 app.use(methodOverride('_method'))
-app.use(cors())
+app.use(cors({
+  origin: "https://mysterious-everglades-87446.herokuapp.com",
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+  credentials: true // allow session cookie from browser to pass through
+}))
 
 app.use(session({
   secret: 'tomato-backend',
