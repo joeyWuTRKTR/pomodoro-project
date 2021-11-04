@@ -43,7 +43,7 @@ app.use(session({
   // store: new MongoStore({ mongooseConnection: mongoose.connection })
 }))
 usePassport(app)
-app.use(routes)
+app.use('/apis/', routes)
 
 // Handle Production
 if (process.env.NODE_ENV === 'production') {
