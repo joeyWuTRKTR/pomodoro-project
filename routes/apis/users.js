@@ -15,9 +15,7 @@ router.post('/login', (req, res) => {
   // 檢查 user 是否存在與密碼是否正確
   let userEmail = req.body.email
   let password = req.body.password
-  console.log('user email: ', userEmail)
   User.findOne({ where: { email: userEmail } }).then(user => {
-    console.log('User: ', user)
     if (!user) return res.status(401).json({ status: 'error', message: 'no such user found' })
     if (!bcrypt.compareSync(password, user.password)) {
       return res.status(401).json({ status: 'error', message: 'passwords did not match' })
@@ -57,7 +55,6 @@ router.post('/register', (req, res) => {
 
 // Get user
 router.post('/', (req, res) => {
-  console.log('frontend email: ', req.body.email)
   User
     .findOne({ email: req.body.email })
     .then(user => res.send({ user }))

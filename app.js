@@ -1,12 +1,11 @@
+// import dotenv
 require('dotenv').config()
+
 // frameworks & libraries
 const path = require('path')
 const express = require('express')
-// const exphbs = require('express-handlebars')
 const bodyParser = require('body-parser')
 const session = require('express-session')
-// const MongoStore = require('connect-mongo')(session)
-// const mongoose = require('mongoose')
 const usePassport = require('./config/passport')
 const cors = require('cors')
 const app = express()
@@ -32,17 +31,12 @@ app.use(cors({
   origin: ['https://mysterious-everglades-87446.herokuapp.com'],
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE"
 }))
-  // origin: ['http://localhost:3000']
-  // origin: ["https://mysterious-everglades-87446.herokuapp.com"],
-  // methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-  // credentials: true // allow session cookie from browser to pass through
 
 
 app.use(session({
   secret: 'tomato-backend',
   resave: false,
   saveUninitialized: true,
-  // store: new MongoStore({ mongooseConnection: mongoose.connection })
 }))
 usePassport(app)
 app.use('/apis', routes)
