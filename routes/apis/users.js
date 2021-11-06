@@ -1,3 +1,4 @@
+require('dotenv').config()
 const express = require('express')
 const passport = require('passport')
 const bcrypt = require('bcryptjs')
@@ -15,29 +16,31 @@ router.post('/login', (req, res) => {
   // 檢查 user 是否存在與密碼是否正確
   let userEmail = req.body.email
   let password = req.body.password
-  User.findOne({ where: { email: userEmail } }).then(user => {
-    if (!user) return res.status(401).json({ status: 'error', message: 'no such user found' })
-    if (!bcrypt.compareSync(password, user.password)) {
-      return res.status(401).json({ status: 'error', message: 'passwords did not match' })
-  }
+  User.findOne({ email: userEmail })
+    .then(user => {
+      if (!user) return res.status(401).json({ status: 'error', message: 'no such user found' })
+      if (!bcrypt.compareSync(password, user.password)) {
+        return res.status(401).json({ status: 'error', message: 'passwords did not match' })
+      }
 
-  // 簽發 token
-  var payload = { id: user.id }
-  var token = jwt.sign(payload, 'alphacamp')
-    return res.json({
-      status: 'success',
-      message: 'ok',
-      token: token,
-      user: { id: user.id, name: user.name, email: user.email }
+      // 簽發 token
+      var payload = { id: user.id }
+      var token = jwt.sign(payload, process.env.JWT_TOKEN)
+
+      return res.json({
+        status: 'success',
+        message: 'ok',
+        token: token,
+        user: { id: user.id, name: user.name, email: user.email }
+      })
     })
-  })
 })
 
 // Register
 router.post('/register', (req, res) => {
   // 簽發 token
   var payload = { name: req.body.name }
-  var token = jwt.sign(payload, 'alphacamp')
+  var token = jwt.sign(payload, process.env.JWT_TOKEN)
 
   User
     .create({
