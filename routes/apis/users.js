@@ -27,12 +27,6 @@ router.post('/login', (req, res) => {
       let payload = { id: user.id }
       let token = jwt.sign(payload, process.env.JWT_TOKEN)
 
-      localStorage.removeItem("username")
-      localStorage.removeItem('token')
-
-      localStorage.setItem("username", user.name)
-      localStorage.setItem('token', token)
-
       return res.json({
         status: 'success',
         message: 'ok',
@@ -55,12 +49,6 @@ router.post('/register', (req, res) => {
       password: bcrypt.hashSync(req.body.password, bcrypt.genSaltSync(10), null)
     })
     .then(() => {
-      localStorage.removeItem('token')
-      localStorage.removeItem('username') 
-
-      localStorage.setItem('token', token)
-      localStorage.setItem('username', req.body.name) 
-
       res.json({
         status: 'success', 
         message: 'Register account successfully!',
