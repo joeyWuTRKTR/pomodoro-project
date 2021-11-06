@@ -24,8 +24,14 @@ router.post('/login', (req, res) => {
       }
 
       // 簽發 token
-      var payload = { id: user.id }
-      var token = jwt.sign(payload, process.env.JWT_TOKEN)
+      let payload = { id: user.id }
+      let token = jwt.sign(payload, process.env.JWT_TOKEN)
+
+      localStorage.removeItem("username")
+      localStorage.removeItem('token')
+
+      localStorage.setItem("username", user.name)
+      localStorage.setItem('token', token)
 
       return res.json({
         status: 'success',
@@ -39,8 +45,8 @@ router.post('/login', (req, res) => {
 // Register
 router.post('/register', (req, res) => {
   // 簽發 token
-  var payload = { name: req.body.name }
-  var token = jwt.sign(payload, process.env.JWT_TOKEN)
+  let payload = { name: req.body.name }
+  let token = jwt.sign(payload, process.env.JWT_TOKEN)
 
   User
     .create({
@@ -48,12 +54,19 @@ router.post('/register', (req, res) => {
       email: req.body.email,
       password: bcrypt.hashSync(req.body.password, bcrypt.genSaltSync(10), null)
     })
-    .then(() => res.json({
-      status: 'success', 
-      message: 'Register account successfully!',
-      token: token
-      }) 
-    )
+    .then(() => {
+      localStorage.removeItem('token')
+      localStorage.removeItem('username') 
+
+      localStorage.setItem('token', token)
+      localStorage.setItem('username', req.body.name) 
+
+      res.json({
+        status: 'success', 
+        message: 'Register account successfully!',
+        token: token
+      })
+    })
 })
 
 // Get user
