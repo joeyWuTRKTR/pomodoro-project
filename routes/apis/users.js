@@ -38,27 +38,31 @@ router.post('/login', (req, res) => {
 
 // Register
 router.post('/register', (req, res) => {
-  User
-    .create({
-      name: req.body.name,
-      email: req.body.email,
-      password: bcrypt.hashSync(req.body.password, bcrypt.genSaltSync(10), null)
-    })
-    .then(() => {
-      User.findOne({ email: req.body.email })
-        .then(user => {
-          // 簽發 token
-          let payload = { id: user._id }
-          let token = jwt.sign(payload, process.env.JWT_SECRET)
+  User.findOne({ email: req.body.email })
+    .then(user => {
+      if (user) return res.send({ message: '帳號已被註冊' })
+      User
+      .create({
+        name: req.body.name,
+        email: req.body.email,
+        password: bcrypt.hashSync(req.body.password, bcrypt.genSaltSync(10), null)
+      })
+      .then(() => {
+        User.findOne({ email: req.body.email })
+          .then(user => {
+            // 簽發 token
+            let payload = { id: user._id }
+            let token = jwt.sign(payload, process.env.JWT_SECRET)
 
-          res.json({
-            status: 'success', 
-            message: 'Register account successfully!',
-            token: token,
-            user: { id: user._id , name: user.name, email: user.email }
-          })}
-        )
-        .catch(error => console.log(error))
+            res.json({
+              status: 'success', 
+              message: 'Register account successfully!',
+              token: token,
+              user: { id: user._id , name: user.name, email: user.email }
+            })}
+          )
+          .catch(error => console.log(error))
+      })
     })
 })
 
