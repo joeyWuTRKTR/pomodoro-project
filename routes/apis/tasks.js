@@ -3,7 +3,6 @@ const router = express.Router()
 const Task = require('../../models/task')
 
 router.post('/', async (req, res) => {
-  console.log(req.body.name)
   const task = new Task({
     name: req.body.name,
     predictedTime: req.body.predictedTime

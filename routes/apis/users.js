@@ -25,7 +25,7 @@ router.post('/login', (req, res) => {
 
       // 簽發 token
       let payload = { id: user.id }
-      let token = jwt.sign(payload, process.env.JWT_TOKEN)
+      let token = jwt.sign(payload, process.env.JWT_SECRET)
 
       return res.json({
         status: 'success',
@@ -38,10 +38,6 @@ router.post('/login', (req, res) => {
 
 // Register
 router.post('/register', (req, res) => {
-  // 簽發 token
-  let payload = { name: req.body.name }
-  let token = jwt.sign(payload, process.env.JWT_TOKEN)
-
   User
     .create({
       name: req.body.name,
@@ -49,20 +45,48 @@ router.post('/register', (req, res) => {
       password: bcrypt.hashSync(req.body.password, bcrypt.genSaltSync(10), null)
     })
     .then(() => {
-      res.json({
-        status: 'success', 
-        message: 'Register account successfully!',
-        token: token
-      })
+      User.findOne({ email: req.body.email })
+        .then(user => {
+          // 簽發 token
+          let payload = { id: user._id }
+          let token = jwt.sign(payload, process.env.JWT_SECRET)
+
+          res.json({
+            status: 'success', 
+            message: 'Register account successfully!',
+            token: token,
+            user: { id: user._id , name: user.name, email: user.email }
+          })}
+        )
+        .catch(error => console.log(error))
     })
 })
 
-// Get user
+// Get user for checking if the email exists
 router.post('/', (req, res) => {
   User
     .findOne({ email: req.body.email })
     .then(user => res.send({ user }))
     .catch(error => console.log(error))
+})
+
+// send current user
+// 不能用res.locals，因為res.locals用在渲染頁面上才能使用
+// 因此透過前端傳一個攜帶token的post請求
+// 後端用jwt.verify，輸入token跟密鑰解開user ID
+// 透過user ID到資料庫找使用者資料，回傳給前端
+router.post('/getCurrentUser', (req, res) => {
+  jwt.verify(req.body.token, process.env.JWT_SECRET, (err, user) => {
+    if (err) return res.sendStatus(403)
+    User.findById({ _id: user.id })
+      .then(findUser => res.send({ 
+        id: findUser._id,
+        name: findUser.name, 
+        email: findUser.email 
+        }) 
+      )
+      .catch(error => console.log(error))
+  })
 })
 
 
