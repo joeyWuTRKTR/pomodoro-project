@@ -1,14 +1,20 @@
 const express = require('express')
 const router = express.Router()
 const Task = require('../../models/task')
+const jwt = require('jsonwebtoken')
 
 router.post('/', async (req, res) => {
-  const task = new Task({
-    name: req.body.name,
-    predictedTime: req.body.predictedTime
+  const user = jwt.verify(req.body.token, process.env.JWT_SECRET, (err, user) => {
+    if (err) return res.sendStatus(403)
+    Task
+      .create({
+        name: req.body.name,
+        predictedTime: req.body.predictedTime,
+        userId: user.id
+      })
+      .then(() => res.send({ name: req.body.name, predictedTime: req.body.predictedTime }))
+      .catch(error => console.log(error))
   })
-  await task.save()
-  res.send(task)
 })
 
 router.delete('/:id', async (req, res) => {
