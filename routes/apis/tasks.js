@@ -4,7 +4,7 @@ const Task = require('../../models/task')
 const jwt = require('jsonwebtoken')
 
 router.post('/', async (req, res) => {
-  const user = jwt.verify(req.body.token, process.env.JWT_SECRET, (err, user) => {
+  await jwt.verify(req.body.token, process.env.JWT_SECRET, (err, user) => {
     if (err) return res.sendStatus(403)
     Task
       .create({
