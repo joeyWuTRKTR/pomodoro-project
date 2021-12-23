@@ -32,7 +32,7 @@ Pomodoro會記錄每個完成的任務，在"統計頁面"查看您的一週工�
 登入後的使用者可以編輯以及刪除任務清單中的任務
 - Weekly statistic.  
 每周統計功能
-
+![image](https://github.com/joeyWuTRKTR/pomodoro-project/blob/master/%E5%9C%96%E7%89%872.png)
 # Skills that I have used:
 ### 1. Axios: 
 * Axios method for building fullstack RESTful API design.  
