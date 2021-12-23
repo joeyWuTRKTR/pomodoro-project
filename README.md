@@ -4,6 +4,7 @@ Pomodoro是一款用於提升工作/學習效率的網路應用程式，藉由�
 
 # Demo in Heroku: 
 https://mysterious-everglades-87446.herokuapp.com/#/s
+![image](https://github.com/joeyWuTRKTR/pomodoro-project/blob/master/%E5%9C%96%E7%89%871.png)
 
 # How to Use it?
 1. First, create an account.   
